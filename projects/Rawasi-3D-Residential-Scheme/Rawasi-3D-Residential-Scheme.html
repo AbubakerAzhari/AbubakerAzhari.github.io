@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rawasi 3D Residential Scheme</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+    (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersLight ? 'light' : 'dark'));
+    } catch (e) {}
+  })();
+    </script>
+
+    
+
+</head>
+
+<body>
+
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- ================= NAV ================= -->
+    <header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo" aria-label="Home">
+      <span class="logo-mark">AD</span>
+      <span>Abubaker<span class="grad-text">Azhari</span></span>
+    </a>
+
+    <div class="nav-right">
+      <a href="../../ar.html#projects" class="nav-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Back to portfolio - الملف الشخصي</span>
+      </a>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle color theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+    </header>
+
+    <main>
+
+        <section class="project-hero">
+            
+        </section>
+
+        <div class="root-layout">
+        <!-- Live Vector UI Simulation -->
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="1Welcome.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="2titel.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="3about-project.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="4Img-cover.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="5count.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="6key-features.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="7-about-plot.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="8main-view.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="9concept.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="10rates.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="11-grids-1.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="12-grids-2.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="13-benefits.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+
+
+        <div class="main-layout">
+            <section class="column1 simulation-panel1">
+                <div class="image-cover">
+                <img src="14-footer.png" alt="The Welcome screen">
+                </div>
+            </section>
+        </div>
+        </div>
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+       <div class="container footer-inner">
+        <p>© <span id="year"></span> THE01 By Abubaker Azhari. Built with ❤️ and vanilla JS.</p>
+        <p><a href="../../ar.html#projects">← Back to portfolio - الملف الشخصي</a></p>
+        </div>
+    </footer>
+    
+    <!-- POP-UP OVERLAY WINDOW MODULE (MODAL) -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3 id="modalTitle">Land Information</h3>
+                <span class="close-btn" id="closeBtn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p><strong>Block Number:</strong> <span id="popBlock"></span></p>
+                <p><strong>Land Number:</strong> <span id="popNo"></span></p>
+                <p><strong>Area Size:</strong> <span id="popArea"></span> sq. ft.</p>
+                <p><strong>Type Category:</strong> <span id="popType"></span></p>
+                <p><strong>Metre Price:</strong> $<span id="popPrice"></span></p>
+                <p><strong>Land Status:</strong> <span id="popStatus"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-reserve" id="btnReserve">Reserve</button>
+                <button class="btn btn-buy" id="btnPurchase">Purchase</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Move script to bottom to guarantee DOM is fully interactive -->
+    <script src="script.js"></script>
+
+    
+    <script>
+(function () {
+  const root = document.documentElement;
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  const el = document.getElementById('typed');
+  const roles = [
+    'مطور تطبيقات سطح المكتب',
+    'مطور تطبيقات اندرويد',
+    'محلل بيانات',
+    'مصمم ثلاثي الابعاد',
+    'محاسب',
+    'متعدد المهام',
+    'مهارات تنظيمية',
+    'حل المشكلات'
+  ];
+
+  let roleIndex = 0, charIndex = 0, deleting = false;
+  const TYPE_SPEED = 65, DELETE_SPEED = 32, HOLD_TIME = 1500;
+  function tick() {
+    const current = roles[roleIndex];
+    if (!deleting) {
+      el.textContent = current.slice(0, ++charIndex);
+      if (charIndex === current.length) { deleting = true; return setTimeout(tick, HOLD_TIME); }
+      return setTimeout(tick, TYPE_SPEED);
+    }
+    el.textContent = current.slice(0, --charIndex);
+    if (charIndex === 0) { deleting = false; roleIndex = (roleIndex + 1) % roles.length; return setTimeout(tick, 320); }
+    setTimeout(tick, DELETE_SPEED);
+  }
+  if (el) setTimeout(tick, 500);
+})();
+
+(function () {
+  const nav = document.getElementById('nav');
+  const navLinks = document.getElementById('navLinks');
+  const navToggle = document.getElementById('navToggle');
+  const links = navLinks.querySelectorAll('a');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+  links.forEach(l => l.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+  const sections = document.querySelectorAll('main section[id]');
+  const setActive = id => links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+  new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-45% 0px -50% 0px' }).observe || sections.forEach(s => {});
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(s => obs.observe(s));
+})();
+
+(function () {
+  const bar = document.getElementById('progressBar');
+  const toTop = document.getElementById('toTop');
+  function update() {
+    const st = window.scrollY;
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (st / h) * 100 : 0) + '%';
+    toTop.classList.toggle('show', st > 500);
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
+
+(function () {
+  const items = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('visible')); return; }
+  const obs = new IntersectionObserver((entries, o) => {
+    entries.forEach((e, i) => {
+      if (!e.isIntersecting) return;
+      setTimeout(() => e.target.classList.add('visible'), i * 70);
+      o.unobserve(e.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  items.forEach(el => obs.observe(el));
+})();
+
+(function () {
+  const counters = document.querySelectorAll('.stat-num');
+  const animate = el => {
+    const target = parseInt(el.dataset.count, 10);
+    const duration = 1400;
+    const start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      el.textContent = Math.floor(eased * target).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString('en-US') + (target >= 1000 ? '+' : '');
+    }
+    requestAnimationFrame(step);
+  };
+  const obs = new IntersectionObserver((entries, o) => {
+    entries.forEach(e => { if (e.isIntersecting) { animate(e.target); o.unobserve(e.target); } });
+  }, { threshold: 0.5 });
+  counters.forEach(c => obs.observe(c));
+})();
+
+(function () {
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.project-card');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach((card, i) => {
+        const match = filter === 'all' || card.dataset.category.split(' ').includes(filter);
+        card.classList.toggle('hide', !match);
+        if (match) {
+          card.style.animation = 'none';
+          void card.offsetWidth;
+          card.style.animation = `cardIn .5s var(--ease) ${i * 45}ms backwards`;
+        }
+      });
+    });
+  });
+})();
+
+(function () {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+  const EMAIL = 'hello@example.com';
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+    if (!name || !email || !message) { alert('يرجى ملء جميع الحقول.'); return; }
+    const subject = encodeURIComponent(`رسالة من ${name}`);
+    const body = encodeURIComponent(`الاسم: ${name}\nالبريد: ${email}\n\n${message}`);
+    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    form.reset();
+  });
+})();
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const id = this.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.scrollY - 84;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>
