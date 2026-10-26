@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Abubaker Azhari — Desktop & Mobile Developer</title>
+<meta name="description" content="Personal portfolio of Abubaker Azhari — Desktop Developer building fast, accessible web experiences." />
+
+<!-- Social preview -->
+<meta property="og:title" content="Abubaker Azhari — Desktop & Mobile Developer" />
+<meta property="og:description" content="Portfolio, projects and contact." />
+<meta property="og:type" content="website" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<!-- Set theme before paint to avoid flash -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersLight ? 'light' : 'dark'));
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+:root {
+  --bg:            #08080d;
+  --bg-soft:       #0e0e18;
+  --surface:       rgba(255, 255, 255, 0.035);
+  --surface-2:     rgba(255, 255, 255, 0.07);
+  --border:        rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --text:          #e9e9f2;
+  --text-soft:     #b6b6c8;
+  --muted:         #8b8ba3;
+
+  --accent:        #7c7cff;
+  --accent-2:      #22d3ee;
+  --grad:          linear-gradient(135deg, #7c7cff 0%, #22d3ee 100%);
+  --grad-soft:     linear-gradient(135deg, rgba(124,124,255,.16), rgba(34,211,238,.16));
+
+  --shadow:        0 24px 60px -28px rgba(0, 0, 0, 0.9);
+  --shadow-glow:   0 0 60px -12px rgba(124, 124, 255, 0.45);
+
+  --radius:        18px;
+  --radius-sm:     12px;
+  --nav-h:         72px;
+  --max:           1140px;
+
+  --ease:          cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="light"] {
+  --bg:            #f5f6fb;
+  --bg-soft:       #ffffff;
+  --surface:       rgba(255, 255, 255, 0.75);
+  --surface-2:     #ffffff;
+  --border:        rgba(18, 18, 45, 0.09);
+  --border-strong: rgba(18, 18, 45, 0.18);
+
+  --text:          #12121f;
+  --text-soft:     #3c3c52;
+  --muted:         #6a6a85;
+
+  --accent:        #5454f0;
+  --accent-2:      #0891b2;
+
+  --shadow:        0 24px 60px -30px rgba(30, 30, 80, 0.28);
+  --shadow-glow:   0 0 60px -14px rgba(84, 84, 240, 0.35);
+}
+
+/* ============================================================
+   2. BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+  overflow-x: hidden;
+  transition: background 0.4s var(--ease), color 0.4s var(--ease);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient background glow */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(680px 480px at 12% -5%,  rgba(124, 124, 255, 0.16), transparent 70%),
+    radial-gradient(620px 420px at 92% 8%,   rgba(34, 211, 238, 0.11), transparent 70%),
+    radial-gradient(800px 600px at 50% 110%, rgba(124, 124, 255, 0.09), transparent 70%);
+}
+[data-theme="light"] body::before { opacity: 0.65; }
+
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea { font: inherit; color: inherit; }
+button { background: none; border: none; cursor: pointer; }
+ul { list-style: none; }
+
+::selection { background: var(--accent); color: #fff; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 10px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ============================================================
+   3. LAYOUT HELPERS
+   ============================================================ */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+section { padding: 104px 0; position: relative; }
+
+.section-head { margin-bottom: 56px; max-width: 640px; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: 14px;
+}
+.eyebrow::before {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: var(--accent-2);
+  opacity: 0.7;
+}
+
+.section-title {
+  font-size: clamp(1.85rem, 4vw, 2.65rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.section-title .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.section-sub { color: var(--muted); margin-top: 14px; font-size: 1.02rem; }
+
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================================================
+   4. BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 26px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.94rem;
+  letter-spacing: -0.01em;
+  transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease),
+              background 0.28s var(--ease), border-color 0.28s var(--ease), opacity 0.2s;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.btn:active { transform: translateY(0) scale(0.98); }
+
+.btn-primary {
+  background: var(--grad);
+  color: #fff;
+  box-shadow: 0 12px 32px -12px rgba(124, 124, 255, 0.75);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 44px -14px rgba(124, 124, 255, 0.85);
+}
+
+.btn-ghost {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+  backdrop-filter: blur(10px);
+}
+.btn-ghost:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+}
+
+.btn svg { width: 17px; height: 17px; }
+
+/* ============================================================
+   5. SCROLL PROGRESS + NAV
+   ============================================================ */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--grad);
+  z-index: 300;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 12px rgba(124, 124, 255, 0.8);
+}
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease),
+              backdrop-filter 0.35s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-bottom-color: var(--border);
+}
+
+.nav-inner {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.06rem;
+  letter-spacing: -0.03em;
+}
+.logo-mark {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  background: var(--grad);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 8px 22px -10px rgba(124, 124, 255, 0.9);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nav-links a {
+  position: relative;
+  padding: 9px 15px;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.25s var(--ease), background 0.25s var(--ease);
+}
+.nav-links a:hover { color: var(--text); background: var(--surface); }
+.nav-links a.active { color: var(--text); }
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 50%;
+  transform: translateX(-50%);
+  width: 16px; height: 2px;
+  border-radius: 2px;
+  background: var(--grad);
+}
+
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+
+.icon-btn {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-soft);
+  transition: all 0.25s var(--ease);
+}
+.icon-btn:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+.icon-btn svg { width: 18px; height: 18px; }
+
+/* Theme icon swap */
+[data-theme="dark"] .icon-sun  { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="light"] .icon-sun  { display: none; }
+[data-theme="light"] .icon-moon { display: block; }
+
+.nav-toggle { display: none; }
+
+/* ============================================================
+   6. LANGUAGE SWITCH
+   ============================================================ */
+
+.lang-switch-btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); color: var(--text-soft); font-family: 'JetBrains Mono', monospace; font-size: .76rem; font-weight: 600; letter-spacing: .05em; transition: all .25s var(--ease); }
+.lang-switch-btn:hover { color: var(--text); border-color: var(--border-strong); transform: translateY(-2px); }
+.lang-switch-btn svg { width: 14px; height: 14px; }
+
+/* ============================================================
+   6. HERO
+   ============================================================ */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-top: calc(var(--nav-h) + 48px);
+  padding-bottom: 72px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 16px 7px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  font-weight: 500;
+  margin-bottom: 26px;
+}
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+  animation: pulse 2.2s infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6); }
+  70%  { box-shadow: 0 0 0 9px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6.2vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.hero-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(1rem, 2.4vw, 1.3rem);
+  color: var(--accent-2);
+  min-height: 1.9em;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 20px;
+}
+.caret {
+  display: inline-block;
+  width: 9px;
+  height: 1.15em;
+  background: var(--accent-2);
+  margin-left: 3px;
+  animation: blink 1s steps(1) infinite;
+  border-radius: 1px;
+}
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+.hero-desc {
+  color: var(--muted);
+  font-size: 1.06rem;
+  max-width: 520px;
+  margin-bottom: 36px;
+}
+
+.hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 40px; }
+
+.socials { display: flex; gap: 10px; }
+.socials a {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  transition: all 0.28s var(--ease);
+}
+.socials a:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px -14px var(--accent);
+}
+.socials svg { width: 19px; height: 19px; }
+
+/* Code window */
+.code-card {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transform: perspective(1400px) rotateY(-7deg) rotateX(3deg);
+  transition: transform 0.6s var(--ease);
+  animation: floaty 7s ease-in-out infinite;
+}
+.code-card:hover {
+  transform: perspective(1400px) rotateY(0deg) rotateX(0deg) translateY(-6px);
+}
+@keyframes floaty {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -12px; }
+}
+
+.code-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot.r { background: #ff5f57; }
+.dot.y { background: #febc2e; }
+.dot.g { background: #28c840; }
+.code-title {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.code-card pre {
+  padding: 22px 20px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.85;
+  color: var(--text-soft);
+}
+.c-key  { color: #c084fc; }
+.c-var  { color: #60a5fa; }
+.c-prop { color: #22d3ee; }
+.c-str  { color: #86efac; }
+.c-fn   { color: #fbbf24; }
+[data-theme="light"] .c-key  { color: #9333ea; }
+[data-theme="light"] .c-var  { color: #2563eb; }
+[data-theme="light"] .c-prop { color: #0891b2; }
+[data-theme="light"] .c-str  { color: #16a34a; }
+[data-theme="light"] .c-fn   { color: #d97706; }
+
+/* ============================================================
+   7. ABOUT
+   ============================================================ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 60px;
+  align-items: start;
+}
+.about-text p { color: var(--text-soft); margin-bottom: 18px; }
+.about-text p:last-child { margin-bottom: 0; }
+.about-text strong { color: var(--text); font-weight: 600; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.stat {
+  padding: 22px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: all 0.3s var(--ease);
+}
+.stat:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+.stat-num {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   8. SKILLS
+   ============================================================ */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.skill-card {
+  padding: 28px 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  transition: all 0.35s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.skill-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--grad-soft);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.skill-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+.skill-card:hover::before { opacity: 1; }
+.skill-card > * { position: relative; z-index: 1; }
+
+.skill-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--grad);
+  color: #fff;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 26px -14px rgba(124, 124, 255, 0.9);
+}
+.skill-icon svg { width: 21px; height: 21px; }
+
+.skill-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  padding: 5px 11px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-soft);
+  transition: all 0.25s var(--ease);
+}
+.chip:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   9. PROJECTS
+   ============================================================ */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 34px;
+}
+.filter-btn {
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: all 0.28s var(--ease);
+}
+.filter-btn:hover { color: var(--text); border-color: var(--border-strong); }
+.filter-btn.active {
+  background: var(--grad);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 10px 26px -14px rgba(124, 124, 255, 0.9);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+}
+
+.project-card {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s var(--ease), border-color 0.4s var(--ease),
+              box-shadow 0.4s var(--ease), opacity 0.35s var(--ease);
+  animation: cardIn 0.5s var(--ease) backwards;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.project-card.hide { display: none; }
+
+.project-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow), var(--shadow-glow);
+}
+
+.project-thumb {
+  height: 168px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.project-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(circle at 50% 50%, #000 25%, transparent 78%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 25%, transparent 78%);
+}
+.project-thumb .emoji {
+  font-size: 2.9rem;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
+  transition: transform 0.5s var(--ease);
+}
+.project-card:hover .emoji { transform: scale(1.14) rotate(-5deg); }
+
+.project-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
+
+.project-title {
+  font-size: 1.14rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 9px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.project-desc {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+.project-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+.project-tags span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.project-links { display: flex; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.project-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  transition: color 0.25s var(--ease), gap 0.25s var(--ease);
+}
+.project-links a:hover { color: var(--accent-2); gap: 10px; }
+.project-links svg { width: 15px; height: 15px; }
+
+/* ============================================================
+   10. TIMELINE
+   ============================================================ */
+.timeline { position: relative; padding-left: 34px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px; top: 8px; bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent-2), transparent);
+  border-radius: 2px;
+  opacity: 0.55;
+}
+
+.tl-item { position: relative; padding-bottom: 40px; }
+.tl-item:last-child { padding-bottom: 0; }
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -34px; top: 6px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+  transition: all 0.3s var(--ease);
+}
+.tl-item:hover::before {
+  background: var(--accent);
+  transform: scale(1.18);
+}
+
+.tl-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--accent-2);
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+.tl-role { font-size: 1.08rem; font-weight: 700; letter-spacing: -0.02em; }
+.tl-company { color: var(--muted); font-size: 0.9rem; margin-bottom: 10px; font-weight: 500; }
+.tl-desc { color: var(--text-soft); font-size: 0.93rem; max-width: 640px; }
+
+/* ============================================================
+   11. CONTACT
+   ============================================================ */
+.contact-wrap {
+  border-radius: 26px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  padding: 56px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.contact-wrap::before {
+  content: '';
+  position: absolute;
+  top: -160px; right: -160px;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: var(--grad);
+  opacity: 0.13;
+  filter: blur(70px);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-info h2 {
+  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.18;
+  margin-bottom: 16px;
+}
+.contact-info p { color: var(--muted); margin-bottom: 30px; }
+
+.contact-list { display: flex; flex-direction: column; gap: 14px; }
+.contact-list a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.94rem;
+  color: var(--text-soft);
+  transition: color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.contact-list a:hover { color: var(--text); transform: translateX(5px); }
+.contact-list .ci {
+  width: 40px; height: 40px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--accent-2);
+  flex-shrink: 0;
+}
+.contact-list svg { width: 18px; height: 18px; }
+
+/* Form */
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 7px;
+  letter-spacing: 0.02em;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text);
+  font-size: 0.93rem;
+  transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  resize: vertical;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--muted); opacity: 0.6; }
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.form-group textarea { min-height: 118px; }
+
+.form-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* ============================================================
+   12. FOOTER
+   ============================================================ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 34px 0;
+  position: relative;
+  z-index: 1;
+}
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+.footer-inner a:hover { color: var(--accent-2); }
+
+/* Back to top */
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--grad);
+  color: #fff;
+  box-shadow: 0 14px 34px -14px rgba(124, 124, 255, 0.95);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  transition: all 0.35s var(--ease);
+  z-index: 150;
+}
+.to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+.to-top:hover { transform: translateY(-4px); }
+.to-top svg { width: 19px; height: 19px; }
+
+/* ============================================================
+   13. REVEAL ANIMATIONS
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+  will-change: opacity, transform;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ============================================================
+   14. RESPONSIVE
+   ============================================================ */
+@media (max-width: 980px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 52px; }
+  .code-card { transform: none; max-width: 520px; }
+  .code-card:hover { transform: translateY(-6px); }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 42px; }
+  .contact-wrap { padding: 38px 28px; }
+}
+
+@media (max-width: 860px) {
+  section { padding: 78px 0; }
+  .nav-toggle { display: grid; }
+
+  .nav-links {
+    position: fixed;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 16px 24px 26px;
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom: 1px solid var(--border);
+    transform: translateY(-130%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.45s var(--ease), opacity 0.35s var(--ease);
+  }
+  .nav-links.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav-links a { padding: 13px 16px; border-radius: 12px; font-size: 0.98rem; }
+  .nav-links a.active::after { display: none; }
+  .nav-links a.active { background: var(--surface); color: var(--text); }
+}
+
+@media (max-width: 560px) {
+  .container { padding-inline: 18px; }
+  .nav-inner { padding-inline: 18px; }
+  .hero { min-height: auto; padding-top: calc(var(--nav-h) + 36px); }
+  .hero-cta { flex-direction: column; align-items: stretch; }
+  .hero-cta .btn { width: 100%; }
+  .stats { grid-template-columns: 1fr; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .contact-wrap { padding: 30px 20px; border-radius: 20px; }
+  .to-top { right: 16px; bottom: 16px; }
+  .footer-inner { justify-content: center; text-align: center; }
+}
+
+/* ============================================================
+   15. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Scroll progress -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ================= NAV ================= -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#home" class="logo" aria-label="Home">
+      <span class="logo-mark">AZ</span>
+      <span>Abubaker<span class="grad-text">Azhari</span></span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="ar.html" class="lang-switch-btn" aria-label="Switch to Arabic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        العربية
+      </a>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle color theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+      </button>
+
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-grid">
+
+        <div class="hero-content">
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            Available for new opportunities
+          </div>
+
+          <h1>
+            Hi, I'm <span class="grad-text">Abubaker Azhari</span><br />
+            I build things for the desktop & android.
+          </h1>
+
+          <div class="hero-role">
+            <span id="typed"></span><span class="caret"></span>
+          </div>
+
+          <p class="hero-desc">
+            A passionate developer crafting fast, accessible and delightful
+            digital experiences. I turn complex problems into clean,
+            maintainable code — and ideas into products people love to use.
+          </p>
+
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-primary">
+              View My Work
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+            <a href="#" class="btn btn-ghost" id="resumeBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+              Download CV
+            </a>
+          </div>
+
+          <div class="socials">
+            <a href="https://github.com/AbubakerAzhari" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/abubakerazhari" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            </a>
+            <a href="https://www.kaggle.com/abubakerazhari" target="_blank" rel="noopener" aria-label="X / Twitter">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M.1025 7.3475c-.0681 0-.1022.0341-.1022.102v6.752c0 .0681.034.1022.1022.1022h.7049c.068 0 .1022-.034.1022-.1023v-1.481l.4187-.3985 1.5016 1.91c.041.0477.0884.0716.143.0716h.9091c.0476 0 .0748-.0135.0817-.0407.0135-.041.0066-.075-.0206-.1023l-1.9816-2.4618 1.9002-1.8384c.0204-.0205.0237-.051.01-.092-.0137-.0339-.0408-.051-.0816-.051h-.9398c-.0477 0-.0953.024-.143.0716L.9096 11.607V7.4496c0-.0679-.0342-.102-.1022-.102zm18.0417 0c-.068 0-.102.0341-.102.102v6.752c0 .0681.034.102.102.102h.705c.068 0 .102-.034.102-.102v-6.752c0-.068-.034-.102-.102-.102zM5.961 9.6254c-.5653 0-1.11.1806-1.6343.5415-.0545.0545-.0648.102-.0307.143l.3676.5208c.0272.0477.0717.0545.133.0204.3948-.2722.783-.4086 1.1644-.4086.2927 0 .5158.0886.669.2656.1532.1771.2197.3917.1992.6436-.6606.0681-1.1545.1495-1.4813.245-.8308.2383-1.2461.6913-1.2461 1.3586 0 .4222.1533.7695.4598 1.0419.3132.2654.6845.3982 1.1134.3982.4698 0 .8545-.1125 1.1542-.3372v.1432c0 .0682.0374.102.1123.102h.7048c.068 0 .102-.0338.102-.102V11.372c0-.6604-.2245-1.1406-.6739-1.4403-.3065-.2043-.6776-.3063-1.1134-.3063zm4.3225 0c-.6742 0-1.195.2622-1.5627.7865-.3133.4359-.4699.9671-.4699 1.5936 0 .6604.1634 1.2087.4903 1.6444.3744.4972.892.7455 1.5526.7455.5313 0 .9567-.1327 1.2768-.3982v.531c0 .858-.4122 1.287-1.236 1.287-.361 0-.732-.1907-1.1132-.572a.098.098 0 00-.0716-.0306c-.034 0-.0613.0102-.0817.0307l-.4802.48c-.0408.0613-.0375.1124.0103.1532.1361.1157.2554.2129.3576.2911.102.0783.1905.1413.2656.189.354.1975.7284.2961 1.1235.2961.6808 0 1.207-.1925 1.5781-.577.3711-.3848.5567-.9484.5567-1.6903V9.8196c0-.068-.034-.102-.102-.102h-.705c-.0682 0-.1021.034-.1021.102v.2043c-.3471-.2657-.7763-.3985-1.287-.3985zm4.8021 0c-.6742 0-1.195.2622-1.5627.7865-.3132.4359-.4699.9671-.4699 1.5936 0 .6604.1633 1.2087.4903 1.6444.3744.4972.892.7455 1.5526.7455.5311 0 .9566-.1327 1.2768-.3982v.531c0 .858-.4122 1.287-1.236 1.287-.361 0-.732-.1907-1.1133-.572a.098.098 0 00-.0716-.0306c-.034 0-.0612.0102-.0816.0307l-.48.48c-.0409.0613-.0376.1124.01.1532.1363.1157.2555.2129.3576.2911.1021.0783.1906.1413.2657.189.354.1975.7285.2961 1.1237.2961.6808 0 1.2068-.1925 1.5781-.577.371-.3848.5565-.9484.5565-1.6903V9.8196c0-.068-.034-.102-.102-.102h-.7049c-.0682 0-.1022.034-.1022.102v.2043c-.3474-.2657-.7763-.3985-1.287-.3985zm6.7457 0c-.6537 0-1.185.211-1.5936.6332-.4427.4632-.664 1.0283-.664 1.6956 0 .7083.225 1.2905.6743 1.7467.463.463 1.042.6945 1.7366.6945.6467 0 1.2154-.1838 1.7057-.5515.0545-.041.0545-.0884 0-.143l-.4802-.4903c-.041-.0409-.0919-.0409-.1533 0-.2998.2112-.6368.3167-1.0112.3167-.4222 0-.7729-.119-1.052-.3576-.2452-.2248-.3882-.5038-.429-.8375h3.3197c.0679 0 .1022-.0341.1022-.1023l.01-.2244c.0341-.6878-.1668-1.26-.6025-1.7162-.4224-.4426-.9432-.664-1.5627-.664zm-.0206.7865c.3268 0 .6062.1056.8377.3166.2452.211.371.4734.378.7865h-2.4618c.0613-.3269.2077-.5925.4392-.7968.2313-.2042.5004-.3063.8069-.3063zm-11.4249.102c.6196 0 1.0146.2181 1.1848.6538v1.6854c-.1702.4358-.5755.6538-1.2155.6538-.3133 0-.5687-.0986-.7661-.2963-.2656-.2518-.3983-.6538-.3983-1.2053 0-.9941.3984-1.4914 1.1951-1.4914zm4.802 0c.6196 0 1.0148.2181 1.1851.6538h-.0002v1.6854c-.1703.4358-.5755.6538-1.2155.6538-.3132 0-.5686-.0986-.7661-.2963-.2655-.2518-.3983-.6538-.3983-1.2053 0-.9941.3983-1.4914 1.195-1.4914zm-8.3586 1.6547v1.0215c-.286.286-.6675.412-1.1441.3779-.1703-.0135-.32-.0663-.4493-.1582-.1294-.0919-.2045-.2129-.2249-.3627-.0341-.2657.1158-.47.4495-.6129.2452-.1088.7013-.1974 1.3688-.2656z"/>
+              </svg>
+              </a>
+            <a href="mailto:abubaker.azhari@gmail.com" aria-label="Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="3"/><path d="M22 7l-10 6L2 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Code window -->
+        <div class="code-card" aria-hidden="true">
+          <div class="code-head">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="code-title">developer.js</span>
+          </div>
+<pre><code><span class="c-key">const</span> <span class="c-var">developer</span> = {
+  <span class="c-prop">name</span>: <span class="c-str">'Abubaker Azhari'</span>,
+  <span class="c-prop">role</span>: <span class="c-str">'Desktop & Android Developer'</span>,
+  <span class="c-prop">location</span>: <span class="c-str">'Earth 🌍'</span>,
+  <span class="c-prop">stack</span>: [
+    <span class="c-str">'Java'</span>, <span class="c-str">'Python'</span>,
+    <span class="c-str">'MySQL'</span>, <span class="c-str">'SQLite'</span>
+  ],
+  <span class="c-prop">focus</span>: <span class="c-str">'clean, scalable code'</span>,
+  <span class="c-fn">available</span>: () => <span class="c-key">true</span>
+};</code></pre>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section id="about">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">About me</div>
+        <h2 class="section-title">Turning ideas into <span class="grad">reality</span></h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            I'm <strong>Desktop & Android Developer, Data Analyst and 3D Designer</strong><br>
+            Passionate about using technology to improve and grow companies and a visionary leader
+            in technology.
+            Skilled in <strong>Java, desktop and Android development</strong>, 
+            <strong>Data Analyst</strong> and <strong>3D Design</strong>, with a strong eye for 
+            design and a obsession with performance.<br>
+          </p>
+          <p>
+            Proven track record of developing technical solutions that help the entire company. with 
+            a track record as an agent of change to deal with data, especially Odoo ERP and SMACC 
+            Software. and auditing accounting transactions and managing the inventory.
+            In my spare time, you'll find me experimenting with new tools and frameworks.
+          </p>
+          <p>
+            I'm currently open to freelance work and full-time roles where I can build
+            meaningful products with a great team.
+          </p>
+        </div>
+
+        <div class="stats reveal">
+          <div class="stat">
+            <div class="stat-num" data-count="9">0</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-count="8">0</div>
+            <div class="stat-label">Projects Built</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-count="3">0</div>
+            <div class="stat-label">Employers</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-count="28800">0</div>
+            <div class="stat-label">Hours Work</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SKILLS ================= -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Skills</div>
+        <h2 class="section-title">My technical <span class="grad">toolbox</span></h2>
+        <p class="section-sub">Technologies and tools I use to bring products to life.</p>
+      </div>
+
+      <div class="skills-grid">
+
+        <article class="skill-card reveal">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
+            </svg>
+          </div>
+          <h3>User interface</h3>
+          <div class="chips">
+            <span class="chip">FXML</span>
+            <span class="chip">XML</span>
+            <span class="chip">HTML5</span>
+            <span class="chip">CSS3</span>
+          </div>
+        </article>
+
+        <article class="skill-card reveal">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+          </div>
+          <h3>Programming Language &amp; Data storage</h3>
+          <div class="chips">
+            <span class="chip">Java</span>
+            <span class="chip">Python</span>
+            <span class="chip">Kotlin</span>
+            <span class="chip">SQl</span>
+            <span class="chip">MySQl</span>
+            <span class="chip">SQLite</span>
+            <span class="chip">Firebase</span>
+            <span class="chip">Supabase</span>
+            <span class="chip">NumPy</span>
+            <span class="chip">Pandas</span>
+            <span class="chip">MatplotLib</span>
+            <span class="chip">Seaborn</span>
+            <span class="chip">Plotly.express</span>
+          </div>
+        </article>
+
+        <article class="skill-card reveal">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </div>
+          <h3>Tools &amp; DevOps</h3>
+          <div class="chips">
+            <span class="chip">Git</span>
+            <span class="chip">GitHub Actions</span>
+            <span class="chip">Eclipse</span>
+            <span class="chip">Gluon Scene Builder</span>
+            <span class="chip">Android Studio</span>
+            <span class="chip">Visual Studio Code</span>
+            <span class="chip">Anaconda</span>
+            <span class="chip">Jupyter Notebook</span>
+            <span class="chip">Cinema 4D</span>
+            <span class="chip">Illustrator</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Portfolio</div>
+        <h2 class="section-title">Featured <span class="grad">projects</span></h2>
+        <p class="section-sub">A selection of things I've designed, built and shipped.</p>
+      </div>
+
+      <div class="filters reveal" id="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="desktop">Desktop Apps</button>
+        <button class="filter-btn" data-filter="app">Android Apps</button>
+        <button class="filter-btn" data-filter="analysis">Data Analysis</button>
+        <button class="filter-btn" data-filter="3D">3D Design</button>
+        <button class="filter-btn" data-filter="game">Java Games</button>
+      </div>
+
+      <div class="projects-grid" id="projectsGrid">
+
+        <!-- ================= THE01 Rawasi Map ================= -->
+        <article class="project-card reveal" data-category="desktop">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #6366f1, #22d3ee);">
+            <img src="assets/rawasi-map.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">THE01 Rawasi Map</h3>
+            <p class="project-desc">
+              An interactive map with interface logging in and updating the status of 
+              land parcels. it was built to support and streamline the sales team's 
+              tasks, enabling them to perform their duties simply and easily.
+            </p>
+            <div class="project-tags">
+              <span>Java</span><span>MySQL</span><span>JavaFx</span><span>CSS3</span>
+            </div>
+            <div class="project-links">
+              <a href="projects/THE01-Rawasi-Map/en-THE01-Rawasi-Map.html" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Case Study
+              </a>
+              <a href="projects/THE01-Rawasi-Map/en-THE01-Rawasi-Map-Live-Demo.html" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Live Demo
+              </a>
+              <a href="https://github.com/AbubakerAzhari/THE01-Rawasi-Map" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= THE01 System ================= -->
+        <article class="project-card reveal" data-category="desktop">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #fbf9f9, #f8f8f7);">
+            <img src="assets/logo_THE01_System.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">THE01 System</h3>
+            <p class="project-desc">
+              Working on the project.
+            </p>
+            <div class="project-tags">
+              <span>Java</span><span>MySQL</span><span>JavaFx</span><span>CSS3</span>
+            </div>
+            <div class="project-links">
+              <a href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Case Study
+              </a>
+              <a href="#">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= My Family ================= -->
+        <article class="project-card reveal" data-category="app">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">
+            <img src="assets/logo_MyFamily.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">My Family</h3>
+            <p class="project-desc">
+              My Family application is designed to document, track, and catalog lineages, tribes, families, 
+              and individuals. It serves as a comprehensive database for a family’s members, notable figures, 
+              and descendants. The application aims to document and trace the lineage of a family—as well as 
+              other families—to connect generations, preserve the family fabric and social cohesion within the 
+              family community, and function as a reliable reference.<br>
+              Although the application’s current scope for documentation and cataloging is limited to a single 
+              family, it is fully capable of recording and documenting numerous other lineages, tribes, and 
+              families, potentially evolving into an extensive encyclopedia, provided that the necessary sources 
+              for such information are available.<br><br>
+              Working on the project.
+            </p>
+            <div class="project-tags">
+              <span>Kotlin</span><span>Supabase</span><span>XML</span>
+            </div>
+            <div class="project-links">
+              <a href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+               Details
+              </a>
+              <a href="#">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+              <a href="#">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Download
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Arbagi Platform ================= -->
+         <article class="project-card reveal" data-category="app">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #cae1ec, #ffffff);">
+            <img src="assets/logo_arbagi_the01_az.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Arbagi Platform</h3>
+            <p class="project-desc">
+              Arbagi platform application is designed for Android devices and stands out as a comprehensive, 
+              multi-faceted app. It encompasses a diverse range of sections—a combination rarely found together 
+              within a single application.<br>
+              The app features various social, cultural, and Islamic-charitable sections, all aimed at building 
+              an informed, cohesive, and interconnected digital community capable of facing challenges.
+            </p>
+            <div class="project-tags">
+              <span>Java</span><span>Firebase</span><span>XML</span>
+            </div>
+            <div class="project-links">
+              <a href="projects/Arbagi-Platfrom/en-Arbagi-Platform.html" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Details
+              </a>
+              <a href="#" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+              <a href="downloads/downloads.html" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Download
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Brickout Ball Game ================= -->
+        <article class="project-card reveal" data-category="game">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #10b981, #22d3ee);">
+            <img src="assets/Brickout-Ball-Game.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Brickout Ball Game</h3>
+            <p class="project-desc">
+              Brick Breaker game is a Breakout in which the player must smash a wall of bricks by
+              deflecting a bouncing ball with a paddle. The paddle may move horizontally and is 
+              controlled with the computer's keyboard. The player gets 5 points with every brick 
+              smashed, a life is lost if the ball hits the bottom of the screen. When all the bricks 
+              have been destroyed, the game is over.
+            </p>
+            <div class="project-tags">
+              <span>Java</span><span>Java Swing</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/AbubakerAzhari/Brickout-Ball-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Live Demo
+              </a>
+              <a href="https://github.com/AbubakerAzhari/Brickout-Ball-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Pong Game ================= -->
+        <article class="project-card reveal" data-category="game">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+            <img src="assets/Pong-Game.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Pong Game</h3>
+            <p class="project-desc">
+              Pong is a table tennis–themed twitch arcade sports video game, featuring simple two-dimensional
+              graphics. the goal is to defeat your opponent by being the first one to 
+              gain 10 point, a player gets a point once the opponent misses a ball. The game can be played with
+              two human players, or one player against a computer controlled paddle.
+            </p>
+            <div class="project-tags">
+              <span>Java</span><span>Java Swing</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/AbubakerAzhari/Pong-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Live Demo
+              </a>
+              <a href="https://github.com/AbubakerAzhari/Pong-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Flappy Bird Game ================= -->
+        <article class="project-card reveal" data-category="game">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+            <img src="assets/Flappy-Bird-Game.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Flappy Bird Game</h3>
+            <p class="project-desc">
+              Flappy Bird game is a side-scroller where the player controls a bird attempting to fly
+              between columns of green pipes without hitting them. The player's score is determined
+              by the number of pipes they pass.
+            </p>
+            <div class="project-tags">
+              <span>Java</span><span>Java Swing</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/AbubakerAzhari/Flappy-Bird-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Live Demo
+              </a>
+              <a href="https://github.com/AbubakerAzhari/Flappy-Bird-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Tic Tac Toe Game ================= -->
+        <article class="project-card reveal" data-category="game">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+            <img src="assets/Tic-Tac-Toe-Game.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Tic Tac Toe Game</h3>
+            <p class="project-desc">
+              Tic-tac-toe (also known as noughts and crosses or Xs and Os) is a classic 
+              paper-and-pencil or digital game for two players who take turns marking 
+              spaces in a 3×3 grid.
+            </p>
+            <div class="project-tags">
+              <span>Java</span><span>Java Swing</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/AbubakerAzhari/Tic-Tac-Toe-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Live Demo
+              </a>
+              <a href="https://github.com/AbubakerAzhari/Tic-Tac-Toe-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Snake Game ================= -->
+        <article class="project-card reveal" data-category="game">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+            <img src="assets/snake-game.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Snake Game</h3>
+            <p class="project-desc">
+              Snake is a video game genre where you guide a growing line, or snake, across a grid
+              or arena to eat food items while avoiding walls and your own tail.
+            </p>
+            <div class="project-tags">
+              <span>Java</span><span>Java Swing</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/AbubakerAzhari/Tic-Tac-Toe-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Live Demo
+              </a>
+              <a href="https://github.com/AbubakerAzhari/Tic-Tac-Toe-Game" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Airline passenger Satisfaction ================= -->
+        <article class="project-card reveal" data-category="analysis">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #ffffff, #ffffff);">
+            <img src="assets/airline-passenger-satisfaction.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Airline passenger Satisfaction</h3>
+            <p class="project-desc">
+              Airline is considered one the main business sector that require those in charge of it to pay 
+              attention to the smallest details of all the services provided, from the services before the 
+              plane took off to the last service provided after the plane landind. Based on this principle, 
+              customer satisfaction is a key and main factor that help in measuring the quality of services 
+              and thus the success of the institution. 
+            </p>
+            <div class="project-tags">
+              <span>NumPy</span><span>Pandas</span><span>Matplotlib</span><span>Seaborn</span><span>Plotly</span>
+            </div>
+            <div class="project-links">
+              <a href="https://www.kaggle.com/code/abubakerazhari/airline-passenger-satisfaction" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Notebook
+              </a>
+              <a href="https://www.kaggle.com/code/abubakerazhari/airline-passenger-satisfaction" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Restaurants Sales ================= -->
+        <article class="project-card reveal" data-category="analysis">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+            <img src="assets/Restaurants-Sales.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Restaurants Sales</h3>
+            <p class="project-desc">
+              In this analysis, we focused in extracting knowledge that help us to drive decision-making, 
+              business optimization and increase profets. So we have here Restaurants orders dataset that
+              collected from delivery app or website, contains numbers of restaurants and details of its 
+              orders that ordered by customers, we will also analysis some metrics like Customers 
+              satisfaction rate (CSAT) and Top-performing categories (Sales Mix). Today we're going to 
+              visually analyse the data on food orders that were placed on a food delivery app.
+            </p>
+            <div class="project-tags">
+              <span>NumPy</span><span>Pandas</span><span>Matplotlib</span><span>Seaborn</span><span>Plotly</span>
+            </div>
+            <div class="project-links">
+              <a href="https://www.kaggle.com/code/abubakerazhari/restaurant-sales" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Notebook
+              </a>
+              <a href="https://www.kaggle.com/code/abubakerazhari/restaurant-sales" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= HR Employee Survey Responses ================= -->
+        <article class="project-card reveal" data-category="analysis">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+            <img src="assets/HR-Employee-Survey-Responses.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">HR Employee Survey Responses</h3>
+            <p class="project-desc">
+              This Empoloyee Survey aim to collect data and information about staffs staisfaction, 
+              loyalty of the organizations and to measure the energy and the spirit they have to do
+              the work and how they feel and thinks about their job, managers, supervisors, and whole 
+              origanization work related.
+            </p>
+            <div class="project-tags">
+              <span>NumPy</span><span>Pandas</span><span>Matplotlib</span><span>Seaborn</span><span>Plotly</span>
+            </div>
+            <div class="project-links">
+              <a href="https://www.kaggle.com/code/abubakerazhari/employee-survey-responses" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Notebook
+              </a>
+              <a href="https://www.kaggle.com/code/abubakerazhari/employee-survey-responses" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Rawasi 3D Residential Scheme ================= -->
+        <article class="project-card reveal" data-category="3D">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+            <img src="assets/Rawasi-3D-Residential-Scheme.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Rawasi 3D Residential Scheme</h3>
+            <p class="project-desc">
+              A 3D model designed to provide an accurate visual simulation
+              that contributes to sound investment planning decisions and 
+              facilitates project understanding for all stakeholders before
+              actual implementation begins.
+            </p>
+            <div class="project-tags">
+              <span>Cinema 4D</span><span>3D Design</span><span>3D Motion Graphic</span>
+            </div>
+            <div class="project-links">
+              <a href="projects/Rawasi-3D-Residential-Scheme/Rawasi-3D-Residential-Scheme.html" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Live View
+              </a>
+              <a href="projects/Rawasi-3D-Residential-Scheme/Rawasi-3D-Residential-Scheme.html" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ================= Arbagi 3D Residential Scheme ================= -->
+        <article class="project-card reveal" data-category="3D">
+          <div class="project-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+            <img src="assets/Arbagi-3D-Residential-Scheme.png" alt="The Welcome screen">
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Arbagi 3D Residential Scheme</h3>
+            <p class="project-desc">
+              A detailed 3D master plan of arbagi, a historic
+              area in sudan history, showing the overall layout
+              of residential plots and key service facilities, 
+              with an emphasis on the cultural and historical 
+              identity of the region. 
+            </p>
+            <div class="project-tags">
+              <span>Cinema 4D</span><span>3D Design</span><span>3D Motion Graphic</span>
+            </div>
+            <div class="project-links">
+              <a href="projects/Arbagi-3D-Residential-Scheme/Arbagi-3D-Residential-Scheme.html" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                Live View
+              </a>
+              <a href="projects/Arbagi-3D-Residential-Scheme/Arbagi-3D-Residential-Scheme.html" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                Source
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <section id="experience">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Career</div>
+        <h2 class="section-title">Where I've <span class="grad">worked</span></h2>
+      </div>
+
+      <div class="timeline">
+
+        <div class="tl-item reveal">
+          <div class="tl-date">Nov 2021 — Oct 2023</div>
+          <h3 class="tl-role">Accountant</h3>
+          <div class="tl-company">Rukn Salat Mustahlik market · Riyadh, Saudi Arabia</div>
+          <p class="tl-desc">
+            Manage all accounting transactions, Publish financial statements in 
+            time, Handle monthly, quarterly, and annual closings. Reconsile accounts
+            payable and receivable, Ensure timely bank payments. Manage balance sheets
+            and profit/loss statements. Process daily banking and perform daily bank
+            reconciliations in the accounting system. Manage the payroll and ensuring
+            accurate and timely payment of employees. Help businesses easily and 
+            efficiently manage the ordering, stocking, storing and using of inventory.
+          </p>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-date">Sep 2020 — Oct 2021</div>
+          <h3 class="tl-role">Systems and Data Analyst</h3>
+          <div class="tl-company">Al Qimma Specialized Hospital · Khartoum, Sudan</div>
+          <p class="tl-desc">
+            Consultant and agent of change and develop actionable steps that will 
+            improve processes and optimize results.
+            Consult on the current state of an IT system and provide data-driven 
+            advice on how to expand or refine its operations to meet company needs.<br>
+            Work with other departments and Prepare reports to communicate insights 
+            to stakeholders.
+            Analyze, test, troubleshoot, and evaluate existing systems to identify 
+            any potential errors. Working with systems developers to analyze and 
+            Discuss requirements and propose solutions and ensure the accuracy of 
+            reports extracted from a system.<br>
+            Supervising System conversion from an old system (Hard)to a new one(Odoo ERP).
+            monitor staff activities data to understand how they use systems, and how 
+            they interact with sensitive data. and Conduct orientations, training and 
+            ensure they understand and implement recommendations and guidelince.<br>
+            Supervising the insurance department, reviewing insurance company claims 
+            and preparing related reports. Handles policyholder inquiries, provides 
+            policy recommendations, and assists with claims processing. Assist in sending 
+            and receiving emails from insurance companies regarding treatment costs and 
+            coverage rates.<br>
+            I supervise the pharmacy staff, oversee daily audits of medication withdrawals 
+            for patients covered by insurance, and ensure that pharmacy client records align 
+            with hospital records.<br>
+            Reviewing patient files, services provided, and addressing related problems.
+            Reviewing and verifying accuracy of opening balances and financial records. 
+            and ensures that companies comply with regulations. Highlighting any 
+            discrepancies in accounting methods, among other things.
+          </p>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-date">Jan 2018 — Jul 2020</div>
+          <h3 class="tl-role">IT Support Technician</h3>
+          <div class="tl-company">Al Rawasi Engineering Company · Part-time · Khartoum, Sudan.</div>
+          <p class="tl-desc">
+            Install hardware and software for business. Mantain computer systems and 
+            equipment and diagnose, troubleshoot.<br>
+            Provide support to any members of an organization who needs computer-
+              related technical assisstance.<br>
+              Designing animations, sound and visual effects, and maps to create digital content
+               and graphics across various media, which support marketing and advertising efforts. 
+               Additionally, developing and designing systems tailored to meet the organization's needs.
+            
+          </p>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-date">Mar 2014 — Jul 2020</div>
+          <h3 class="tl-role">Accountant</h3>
+          <div class="tl-company">Al Rawasi Engineering Company · Full-time · Khartoum, Sudan.</div>
+          <p class="tl-desc">
+            Manage all accounting transactions. Publish financial statements in time.
+            Handle monthly, quarterly and annual closings.<br>
+            Reconsile accounts payable and receivable. Ensure timely bank payments.
+            Manage balance sheets and profit/loss statements.
+            Process daily banking and perform daily bank reconciliations in the 
+            accounting system.<br>
+            Manage the payroll process and ensuring accurate and timely payments
+            of employees.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-wrap reveal">
+        <div class="contact-grid">
+
+          <div class="contact-info">
+            <div class="eyebrow">Contact</div>
+            <h2>Let's build something <span class="grad-text">great together</span></h2>
+            <p>
+              I'm currently open to freelance projects and full-time roles.
+              Drop me a message and I'll get back to you within 24 hours.
+            </p>
+
+            <div class="contact-list">
+              <a href="mailto:abubaker.azhari@gmail.com">
+                <span class="ci">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M22 7l-10 6L2 7"/></svg>
+                </span>
+                abubaker.azhari@gmail.com
+              </a>
+              <a href="https://github.com/AbubakerAzhari" target="_blank" rel="noopener">
+                <span class="ci">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+                </span>
+                github.com/Abubaker Azhari
+              </a>
+              <a href="https://www.linkedin.com/in/abubakerazhari" target="_blank" rel="noopener">
+                <span class="ci">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+                </span>
+                linkedin.com/in/Abubaker Azhari
+              </a>
+              <a href="https://www.kaggle.com/abubakerazhari" target="_blank" rel="noopener">
+                <span class="ci">
+                  <svg fill="#20BEFF" role="img" viewBox="0 0 24 24">
+                    <path d="M.1025 7.3475c-.0681 0-.1022.0341-.1022.102v6.752c0 .0681.034.1022.1022.1022h.7049c.068 0 .1022-.034.1022-.1023v-1.481l.4187-.3985 1.5016 1.91c.041.0477.0884.0716.143.0716h.9091c.0476 0 .0748-.0135.0817-.0407.0135-.041.0066-.075-.0206-.1023l-1.9816-2.4618 1.9002-1.8384c.0204-.0205.0237-.051.01-.092-.0137-.0339-.0408-.051-.0816-.051h-.9398c-.0477 0-.0953.024-.143.0716L.9096 11.607V7.4496c0-.0679-.0342-.102-.1022-.102zm18.0417 0c-.068 0-.102.0341-.102.102v6.752c0 .0681.034.102.102.102h.705c.068 0 .102-.034.102-.102v-6.752c0-.068-.034-.102-.102-.102zM5.961 9.6254c-.5653 0-1.11.1806-1.6343.5415-.0545.0545-.0648.102-.0307.143l.3676.5208c.0272.0477.0717.0545.133.0204.3948-.2722.783-.4086 1.1644-.4086.2927 0 .5158.0886.669.2656.1532.1771.2197.3917.1992.6436-.6606.0681-1.1545.1495-1.4813.245-.8308.2383-1.2461.6913-1.2461 1.3586 0 .4222.1533.7695.4598 1.0419.3132.2654.6845.3982 1.1134.3982.4698 0 .8545-.1125 1.1542-.3372v.1432c0 .0682.0374.102.1123.102h.7048c.068 0 .102-.0338.102-.102V11.372c0-.6604-.2245-1.1406-.6739-1.4403-.3065-.2043-.6776-.3063-1.1134-.3063zm4.3225 0c-.6742 0-1.195.2622-1.5627.7865-.3133.4359-.4699.9671-.4699 1.5936 0 .6604.1634 1.2087.4903 1.6444.3744.4972.892.7455 1.5526.7455.5313 0 .9567-.1327 1.2768-.3982v.531c0 .858-.4122 1.287-1.236 1.287-.361 0-.732-.1907-1.1132-.572a.098.098 0 00-.0716-.0306c-.034 0-.0613.0102-.0817.0307l-.4802.48c-.0408.0613-.0375.1124.0103.1532.1361.1157.2554.2129.3576.2911.102.0783.1905.1413.2656.189.354.1975.7284.2961 1.1235.2961.6808 0 1.207-.1925 1.5781-.577.3711-.3848.5567-.9484.5567-1.6903V9.8196c0-.068-.034-.102-.102-.102h-.705c-.0682 0-.1021.034-.1021.102v.2043c-.3471-.2657-.7763-.3985-1.287-.3985zm4.8021 0c-.6742 0-1.195.2622-1.5627.7865-.3132.4359-.4699.9671-.4699 1.5936 0 .6604.1633 1.2087.4903 1.6444.3744.4972.892.7455 1.5526.7455.5311 0 .9566-.1327 1.2768-.3982v.531c0 .858-.4122 1.287-1.236 1.287-.361 0-.732-.1907-1.1133-.572a.098.098 0 00-.0716-.0306c-.034 0-.0612.0102-.0816.0307l-.48.48c-.0409.0613-.0376.1124.01.1532.1363.1157.2555.2129.3576.2911.1021.0783.1906.1413.2657.189.354.1975.7285.2961 1.1237.2961.6808 0 1.2068-.1925 1.5781-.577.371-.3848.5565-.9484.5565-1.6903V9.8196c0-.068-.034-.102-.102-.102h-.7049c-.0682 0-.1022.034-.1022.102v.2043c-.3474-.2657-.7763-.3985-1.287-.3985zm6.7457 0c-.6537 0-1.185.211-1.5936.6332-.4427.4632-.664 1.0283-.664 1.6956 0 .7083.225 1.2905.6743 1.7467.463.463 1.042.6945 1.7366.6945.6467 0 1.2154-.1838 1.7057-.5515.0545-.041.0545-.0884 0-.143l-.4802-.4903c-.041-.0409-.0919-.0409-.1533 0-.2998.2112-.6368.3167-1.0112.3167-.4222 0-.7729-.119-1.052-.3576-.2452-.2248-.3882-.5038-.429-.8375h3.3197c.0679 0 .1022-.0341.1022-.1023l.01-.2244c.0341-.6878-.1668-1.26-.6025-1.7162-.4224-.4426-.9432-.664-1.5627-.664zm-.0206.7865c.3268 0 .6062.1056.8377.3166.2452.211.371.4734.378.7865h-2.4618c.0613-.3269.2077-.5925.4392-.7968.2313-.2042.5004-.3063.8069-.3063zm-11.4249.102c.6196 0 1.0146.2181 1.1848.6538v1.6854c-.1702.4358-.5755.6538-1.2155.6538-.3133 0-.5687-.0986-.7661-.2963-.2656-.2518-.3983-.6538-.3983-1.2053 0-.9941.3984-1.4914 1.1951-1.4914zm4.802 0c.6196 0 1.0148.2181 1.1851.6538h-.0002v1.6854c-.1703.4358-.5755.6538-1.2155.6538-.3132 0-.5686-.0986-.7661-.2963-.2655-.2518-.3983-.6538-.3983-1.2053 0-.9941.3983-1.4914 1.195-1.4914zm-8.3586 1.6547v1.0215c-.286.286-.6675.412-1.1441.3779-.1703-.0135-.32-.0663-.4493-.1582-.1294-.0919-.2045-.2129-.2249-.3627-.0341-.2657.1158-.47.4495-.6129.2452-.1088.7013-.1974 1.3688-.2656z"/></svg>
+                </span>
+                kaggle.com/Abubaker Azhari
+              </a>
+              <a href="#">
+                <span class="ci">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </span>
+                Remote · Worldwide
+              </a>
+            </div>
+          </div>
+
+          <!-- Contact form (opens the user's mail client).
+               To use a real backend, swap the handler for Formspree / Getform. -->
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Abubaker Azhari" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">
+              Send Message
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+              </svg>
+            </button>
+            <p class="form-note">This opens your email client with the message pre-filled.</p>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container footer-inner">
+    <p>© <span id="year"></span> THE01 By Abubaker Azhari. Built with ❤️ and vanilla JS.</p>
+    <p>Designed &amp; developed by <a href="#home">Abubaker Azhari</a></p>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
+<script>
+/* ============================================================
+   1. THEME TOGGLE
+   ============================================================ */
+(function () {
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+})();
+
+/* ============================================================
+   2. TYPEWRITER EFFECT
+   ============================================================ */
+(function () {
+  const el = document.getElementById('typed');
+  const roles = [
+    'Desktop Developer',
+    'Android Developer',
+    'Data Analyst',
+    '3D Designer',
+    'Accountant',
+    'Problem Solver',
+    'Multitasking',
+    'Organizational skills'
+  ];
+
+  let roleIndex = 0;
+  let charIndex = 0;
+  let deleting = false;
+
+  const TYPE_SPEED = 65;
+  const DELETE_SPEED = 32;
+  const HOLD_TIME = 1500;
+
+  function tick() {
+    const current = roles[roleIndex];
+
+    if (!deleting) {
+      el.textContent = current.slice(0, ++charIndex);
+      if (charIndex === current.length) {
+        deleting = true;
+        return setTimeout(tick, HOLD_TIME);
+      }
+      return setTimeout(tick, TYPE_SPEED);
+    }
+
+    el.textContent = current.slice(0, --charIndex);
+    if (charIndex === 0) {
+      deleting = false;
+      roleIndex = (roleIndex + 1) % roles.length;
+      return setTimeout(tick, 320);
+    }
+    setTimeout(tick, DELETE_SPEED);
+  }
+
+  if (el) setTimeout(tick, 500);
+})();
+
+/* ============================================================
+   3. NAV — scroll state, mobile menu, active link
+   ============================================================ */
+(function () {
+  const nav = document.getElementById('nav');
+  const navLinks = document.getElementById('navLinks');
+  const navToggle = document.getElementById('navToggle');
+  const links = navLinks.querySelectorAll('a');
+
+  // Scrolled state
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Mobile menu
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  links.forEach(link => link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Active section highlighting
+  const sections = document.querySelectorAll('main section[id]');
+  const setActive = id => {
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+  };
+
+  const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) setActive(entry.target.id);
+    });
+  }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+  sections.forEach(s => sectionObserver.observe(s));
+})();
+
+/* ============================================================
+   4. SCROLL PROGRESS BAR + BACK TO TOP
+   ============================================================ */
+(function () {
+  const bar = document.getElementById('progressBar');
+  const toTop = document.getElementById('toTop');
+
+  function update() {
+    const scrollTop = window.scrollY;
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = height > 0 ? (scrollTop / height) * 100 : 0;
+
+    bar.style.width = pct + '%';
+    toTop.classList.toggle('show', scrollTop > 500);
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+
+  toTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+
+/* ============================================================
+   5. SCROLL REVEAL ANIMATIONS
+   ============================================================ */
+(function () {
+  const items = document.querySelectorAll('.reveal');
+
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry, i) => {
+      if (!entry.isIntersecting) return;
+      // Small stagger for grouped elements
+      setTimeout(() => entry.target.classList.add('visible'), i * 70);
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+  items.forEach(el => observer.observe(el));
+})();
+
+/* ============================================================
+   6. ANIMATED COUNTERS
+   ============================================================ */
+(function () {
+  const counters = document.querySelectorAll('.stat-num');
+  if (!counters.length) return;
+
+  const animate = el => {
+    const target = parseInt(el.dataset.count, 10);
+    const duration = 1400;
+    const start = performance.now();
+
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      // easeOutExpo
+      const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString() + (target >= 1000 ? '+' : '');
+    }
+    requestAnimationFrame(step);
+  };
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animate(entry.target);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach(c => observer.observe(c));
+})();
+
+/* ============================================================
+   7. PROJECT FILTERS
+   ============================================================ */
+(function () {
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.project-card');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+
+      cards.forEach((card, i) => {
+        const match = filter === 'all' ||
+          card.dataset.category.split(' ').includes(filter);
+
+        card.classList.toggle('hide', !match);
+
+        if (match) {
+          card.style.animation = 'none';
+          // force reflow to restart the animation
+          void card.offsetWidth;
+          card.style.animation = `cardIn .5s var(--ease) ${i * 45}ms backwards`;
+        }
+      });
+    });
+  });
+})();
+
+/* ============================================================
+   8. CONTACT FORM → mailto
+   ============================================================ */
+(function () {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  const EMAIL = 'abubaker.azhari@gmail.com'; // ← change to your email
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    if (!name || !email || !message) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\n${message}`
+    );
+
+    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    form.reset();
+  });
+})();
+
+/* ============================================================
+   9. FOOTER YEAR
+   ============================================================ */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ============================================================
+   10. SMOOTH ANCHOR SCROLL (fallback for older browsers)
+   ============================================================ */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const id = this.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+
+    const target = document.querySelector(id);
+    if (!target) return;
+
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.scrollY - 84;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>
