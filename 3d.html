@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>3D Showcase — Abubaker Azhari</title>
+<meta name="description" content="Interactive 3D design objects by Abubaker Azhari — view OBJ and 3DS files live in the browser." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersLight ? 'light' : 'dark'));
+    } catch (e) {}
+  })();
+</script>
+<style>
+:root {
+  --bg: #08080d; --bg-soft: #0e0e18;
+  --surface: rgba(255,255,255,0.035); --surface-2: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.09); --border-strong: rgba(255,255,255,0.16);
+  --text: #e9e9f2; --text-soft: #b6b6c8; --muted: #8b8ba3;
+  --accent: #7c7cff; --accent-2: #22d3ee;
+  --grad: linear-gradient(135deg, #7c7cff 0%, #22d3ee 100%);
+  --shadow: 0 24px 60px -28px rgba(0,0,0,.9);
+  --shadow-glow: 0 0 60px -12px rgba(124,124,255,.45);
+  --radius: 18px; --radius-sm: 12px; --nav-h: 72px; --max: 1180px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-theme="light"] {
+  --bg: #f5f6fb; --bg-soft: #fff; --surface: rgba(255,255,255,.75); --surface-2: #fff;
+  --border: rgba(18,18,45,.09); --border-strong: rgba(18,18,45,.18);
+  --text: #12121f; --text-soft: #3c3c52; --muted: #6a6a85;
+  --accent: #5454f0; --accent-2: #0891b2;
+  --shadow: 0 24px 60px -30px rgba(30,30,80,.28);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 16px); -webkit-text-size-adjust: 100%; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; overflow-x: hidden; transition: background .4s var(--ease), color .4s var(--ease); -webkit-font-smoothing: antialiased; }
+body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(680px 480px at 12% -5%, rgba(124,124,255,.16), transparent 70%), radial-gradient(620px 420px at 92% 8%, rgba(34,211,238,.11), transparent 70%), radial-gradient(800px 600px at 50% 110%, rgba(124,124,255,.09), transparent 70%); }
+[data-theme="light"] body::before { opacity: .65; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { background: none; border: none; cursor: pointer; font: inherit; color: inherit; }
+ul { list-style: none; }
+::selection { background: var(--accent); color: #fff; }
+::-webkit-scrollbar { width: 10px; } ::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; border: 2px solid var(--bg); }
+
+.container { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: 24px; position: relative; z-index: 1; }
+section { padding: 104px 0; position: relative; }
+.section-head { margin-bottom: 40px; max-width: 640px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 14px; }
+.eyebrow::before { content: ''; width: 26px; height: 1px; background: var(--accent-2); opacity: .7; }
+.section-title { font-size: clamp(1.85rem, 4vw, 2.65rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
+.grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.section-sub { color: var(--muted); margin-top: 14px; font-size: 1.02rem; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 24px; border-radius: 100px; font-weight: 600; font-size: .92rem; transition: transform .28s var(--ease), box-shadow .28s var(--ease), background .28s var(--ease), border-color .28s var(--ease); white-space: nowrap; cursor: pointer; border: 1px solid transparent; }
+.btn:active { transform: translateY(0) scale(.98); }
+.btn svg { width: 16px; height: 16px; }
+.btn-primary { background: var(--grad); color: #fff; box-shadow: 0 12px 32px -12px rgba(124,124,255,.75); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 44px -14px rgba(124,124,255,.85); }
+.btn-ghost { background: var(--surface); border-color: var(--border); color: var(--text); backdrop-filter: blur(10px); }
+.btn-ghost:hover { transform: translateY(-3px); border-color: var(--border-strong); background: var(--surface-2); }
+
+.progress-bar { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: var(--grad); z-index: 300; transition: width .1s linear; box-shadow: 0 0 12px rgba(124,124,255,.8); }
+.nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 200; display: flex; align-items: center; transition: background .35s var(--ease), border-color .35s var(--ease), backdrop-filter .35s var(--ease); border-bottom: 1px solid transparent; }
+.nav.scrolled { background: color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border-bottom-color: var(--border); }
+.nav-inner { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.04rem; letter-spacing: -0.03em; }
+.logo-mark { width: 34px; height: 34px; border-radius: 10px; background: var(--grad); display: grid; place-items: center; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: .88rem; font-weight: 700; box-shadow: 0 8px 22px -10px rgba(124,124,255,.9); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-back { display: inline-flex; align-items: center; gap: 8px; font-size: .88rem; font-weight: 500; color: var(--muted); padding: 8px 14px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); transition: all .25s var(--ease); }
+.nav-back:hover { color: var(--text); border-color: var(--border-strong); transform: translateX(-3px); }
+.nav-back svg { width: 15px; height: 15px; }
+.icon-btn { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; border: 1px solid var(--border); background: var(--surface); color: var(--text-soft); transition: all .25s var(--ease); }
+.icon-btn:hover { color: var(--text); border-color: var(--border-strong); transform: translateY(-2px); }
+.icon-btn svg { width: 18px; height: 18px; }
+[data-theme="dark"] .icon-sun { display: block; } [data-theme="dark"] .icon-moon { display: none; }
+[data-theme="light"] .icon-sun { display: none; } [data-theme="light"] .icon-moon { display: block; }
+
+.page-hero { padding-top: calc(var(--nav-h) + 66px); padding-bottom: 20px; }
+.page-hero h1 { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 16px; }
+.page-hero p { color: var(--muted); max-width: 580px; font-size: 1.02rem; }
+
+.showcase { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+
+.model-list { display: flex; flex-direction: column; gap: 8px; position: sticky; top: calc(var(--nav-h) + 20px); }
+.model-item { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); cursor: pointer; transition: all .3s var(--ease); text-align: left; }
+.model-item:hover { border-color: var(--border-strong); transform: translateX(3px); }
+.model-item.active { border-color: var(--accent); background: var(--grad-soft); box-shadow: 0 0 30px -12px rgba(124,124,255,.5); }
+.model-item .mi-icon { width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--border); color: var(--accent-2); }
+.model-item.active .mi-icon { background: var(--grad); color: #fff; border-color: transparent; }
+.model-item .mi-icon svg { width: 18px; height: 18px; }
+.model-item h4 { font-size: .9rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 2px; }
+.model-item span { font-family: 'JetBrains Mono', monospace; font-size: .66rem; color: var(--muted); text-transform: uppercase; }
+
+.viewer-wrap { border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-soft); overflow: hidden; box-shadow: var(--shadow); position: relative; }
+.viewer-chrome { display: flex; align-items: center; gap: 8px; padding: 13px 16px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
+.viewer-label { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--muted); }
+#canvas-container { width: 100%; height: 560px; position: relative; background: radial-gradient(circle at 50% 40%, #1a1a2e, #08080d); }
+#canvas-container canvas { display: block; width: 100% !important; height: 100% !important; }
+
+.loader { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(8,8,13,.85); z-index: 10; transition: opacity .4s var(--ease), visibility .4s var(--ease); }
+.loader.hidden { opacity: 0; visibility: hidden; }
+.spinner { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.viewer-controls { display: flex; flex-wrap: wrap; gap: 10px; padding: 16px; border-top: 1px solid var(--border); background: var(--surface); }
+.viewer-controls button { display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 100px; font-size: .8rem; font-weight: 500; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-soft); transition: all .25s var(--ease); }
+.viewer-controls button:hover { border-color: var(--border-strong); color: var(--text); transform: translateY(-2px); }
+.viewer-controls button.active { background: var(--grad); color: #fff; border-color: transparent; }
+.viewer-controls svg { width: 14px; height: 14px; }
+
+.model-info { margin-top: 20px; padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); backdrop-filter: blur(10px); }
+.model-info h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+.model-info p { color: var(--muted); font-size: .92rem; }
+.model-info .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.model-info .tags span { font-family: 'JetBrains Mono', monospace; font-size: .7rem; padding: 4px 10px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); }
+
+footer { border-top: 1px solid var(--border); padding: 34px 0; position: relative; z-index: 1; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: .86rem; color: var(--muted); }
+.footer-inner a:hover { color: var(--accent-2); }
+
+.to-top { position: fixed; right: 24px; bottom: 24px; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--grad); color: #fff; box-shadow: 0 14px 34px -14px rgba(124,124,255,.95); opacity: 0; visibility: hidden; transform: translateY(18px); transition: all .35s var(--ease); z-index: 150; }
+.to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+.to-top:hover { transform: translateY(-4px); }
+.to-top svg { width: 19px; height: 19px; }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .75s var(--ease), transform .75s var(--ease); }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  .showcase { grid-template-columns: 1fr; }
+  .model-list { position: static; flex-direction: row; flex-wrap: wrap; }
+  .model-item { flex: 1; min-width: 180px; }
+  #canvas-container { height: 420px; }
+}
+@media (max-width: 560px) {
+  .container { padding-inline: 18px; } .nav-inner { padding-inline: 18px; }
+  .nav-back span { display: none; }
+  #canvas-container { height: 340px; }
+  .to-top { right: 16px; bottom: 16px; }
+  .footer-inner { justify-content: center; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } .reveal { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">AD</span>
+      <span>Abubaker<span class="grad">Azhari</span></span>
+    </a>
+    <div class="nav-right">
+      <a href="en.html#projects" class="nav-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to portfolio - العودة الي الملف الشخصي</span>
+      </a>
+      <a href="motion.html" class="btn btn-ghost" style="padding:8px 16px; font-size:.82rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></svg>
+        Motion - فيديوهات
+      </a>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">3D Showcase</div>
+        <h1>Interactive <span class="grad">3D objects</span></h1>
+        <p>Design studies and product models rendered live — rotate, zoom and inspect each object in real time.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top: 20px;">
+    <div class="container">
+
+      <div class="showcase">
+
+        <div class="model-list" id="modelList">
+          <button class="model-item active" data-model="obj" data-file="models/Trunk-Tree.obj" data-name="Trunk Tree" data-format="OBJ" data-desc="Case Study of a tree trunk with top cut, soil, and a rimmed basin for watering the tree. دراسة حالة لجذع شجرة مقطوعة الجزء العلوي، مع التربة، وحوض ذو حواف لسقي الشجرة">
+            <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+            <div><h4>Trunk Tree</h4><h4>جذع شجرة</h4><span>OBJ · 40.2 MB</span></div>
+          </button>
+          <button class="model-item" data-model="3ds" data-file="models/Grass-and-Mountains.obj" data-name="Grass & Mountains" data-format="OBJ" data-desc="Design of towering Mountains distributed around a green area with green grass that has characteristics similar to natural grass. تصميم جبال شاهقة متوزعة حول منطقة خضراء بها نجيل اخضر ذو خصائص تشبه النجيل الطبيعي">
+            <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9"/></svg></span>
+            <div><h4>Grass & Mountains</h4> <h4>نجيل وجبال</h4><span>3DS · 1.49 MB</span></div>
+          </button>
+          <button class="model-item" data-model="obj" data-file="models/Cubes-and-Heart.obj" data-name="Cubes & heart" data-format="OBJ" data-desc="An abstract, cube-shaped design with six faces, each face carved with a heart connected to one another. تصميم تجريدي مكعب الشكل ذو ستة اوجة منحوت علي كل وجة قلب متصلة ببعضها البعض">
+            <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4zM4 14h16v6H4z"/><path d="M8 7h.01M8 17h.01"/></svg></span>
+            <div><h4>Cubes & heart</h4><h4>مكعبات وقلب</h4><span>OBJ · 3.1 MB</span></div>
+          </button>
+        </div>
+
+        <div>
+          <div class="viewer-wrap reveal">
+            <div class="viewer-chrome">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="viewer-label" id="viewerLabel">Trunk-Tree.obj</span>
+            </div>
+            <div id="canvas-container">
+              <div class="loader" id="loader"><div class="spinner"></div></div>
+            </div>
+            <div class="viewer-controls">
+              <button id="btnRotate" class="active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                Auto-rotate دوران تلقائي
+              </button>
+              <button id="btnWireframe">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Wireframe اطار
+              </button>
+              <button id="btnReset">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                Reset view اعادة ضبط العرض
+              </button>
+            </div>
+          </div>
+
+          <div class="model-info reveal" id="modelInfo">
+            <h3>Trunk Tree - جذع شجرة</h3>
+            <p>Case Study of a tree trunk with top cut, soil, and a rimmed basin for watering the tree.</p>
+            <p>دراسة حالة لجذع شجرة مقطوعة الجزء العلوي، مع التربة، وحوض ذو حواف لسقي الشجرة</p>
+            <div class="tags"><span>OBJ</span><span>Low-poly</span><span>2014</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <p>© <span id="year"></span> Abubaker Azhari. Built with ❤️ and vanilla JS.</p>
+    <p><a href="en.html">← Back to portfolio</a></p>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- Three.js from CDN -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { TDSLoader } from 'three/addons/loaders/TDSLoader.js';
+
+/* ---------- THEME & NAV ---------- */
+(function () {
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  const nav = document.getElementById('nav');
+  const bar = document.getElementById('progressBar');
+  const toTop = document.getElementById('toTop');
+  function update() {
+    const st = window.scrollY;
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    nav.classList.toggle('scrolled', st > 20);
+    bar.style.width = (h > 0 ? (st / h) * 100 : 0) + '%';
+    toTop.classList.toggle('show', st > 600);
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  const items = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries, o) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); o.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+  items.forEach(el => obs.observe(el));
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+
+/* ---------- THREE.JS SETUP ---------- */
+const container = document.getElementById('canvas-container');
+const loaderEl = document.getElementById('loader');
+const viewerLabel = document.getElementById('viewerLabel');
+const infoTitle = document.querySelector('#modelInfo h3');
+const infoDesc = document.querySelector('#modelInfo p');
+const infoTags = document.querySelector('#modelInfo .tags');
+
+const scene = new THREE.Scene();
+scene.background = null;
+
+const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+camera.position.set(2.5, 2, 4);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+container.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 1.5;
+controls.minDistance = 1;
+controls.maxDistance = 20;
+
+/* Lighting */
+const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambient);
+
+const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+keyLight.position.set(5, 8, 5);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(1024, 1024);
+keyLight.shadow.camera.near = 0.5;
+keyLight.shadow.camera.far = 50;
+keyLight.shadow.camera.left = -10;
+keyLight.shadow.camera.right = 10;
+keyLight.shadow.camera.top = 10;
+keyLight.shadow.camera.bottom = -10;
+scene.add(keyLight);
+
+const fillLight = new THREE.DirectionalLight(0x7c7cff, 1.2);
+fillLight.position.set(-5, 3, -3);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0x22d3ee, 1);
+rimLight.position.set(0, -2, -6);
+scene.add(rimLight);
+
+/* Ground */
+const ground = new THREE.Mesh(
+  new THREE.CircleGeometry(12, 64),
+  new THREE.MeshStandardMaterial({ color: 0x1a1a2e, roughness: 1, metalness: 0, transparent: true, opacity: 0.4 })
+);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -1.5;
+ground.receiveShadow = true;
+scene.add(ground);
+
+/* Current model */
+let currentModel = null;
+let currentWireframe = false;
+
+/* ---------- LOADERS ---------- */
+const objLoader = new OBJLoader();
+const tdsLoader = new TDSLoader();
+tdsLoader.setResourcePath('models/');
+
+function clearScene() {
+  if (currentModel) {
+    scene.remove(currentModel);
+    currentModel.traverse((child) => {
+      if (child.isMesh) {
+        child.geometry.dispose();
+        if (Array.isArray(child.material)) {
+          child.material.forEach(m => m.dispose());
+        } else {
+          child.material.dispose();
+        }
+      }
+    });
+    currentModel = null;
+  }
+}
+
+function applyMaterials(object) {
+  object.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+      if (!child.material || Array.isArray(child.material) && child.material.length === 0) {
+        child.material = new THREE.MeshStandardMaterial({
+          color: 0x8899aa,
+          roughness: 0.4,
+          metalness: 0.6,
+        });
+      }
+      if (currentWireframe) {
+        child.material.wireframe = true;
+      }
+    }
+  });
+}
+
+function centerAndScale(object) {
+  const box = new THREE.Box3().setFromObject(object);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+
+  const maxDim = Math.max(size.x, size.y, size.z);
+  if (maxDim === 0) return;
+  const scale = 3 / maxDim;
+  object.scale.setScalar(scale);
+
+  object.position.x = -center.x * scale;
+  object.position.y = -center.y * scale + 0.5;
+  object.position.z = -center.z * scale;
+}
+
+function loadModel(type, file) {
+  clearScene();
+  loaderEl.classList.remove('hidden');
+
+  const onLoad = (object) => {
+    currentModel = object;
+    applyMaterials(object);
+    centerAndScale(object);
+    scene.add(object);
+    loaderEl.classList.add('hidden');
+  };
+
+  const onProgress = (xhr) => {
+    if (xhr.total) {
+      const pct = Math.round((xhr.loaded / xhr.total) * 100);
+      loaderEl.querySelector('.spinner').style.borderTopColor = `hsl(${pct * 1.2}, 80%, 65%)`;
+    }
+  };
+
+  const onError = (err) => {
+    console.error('Error loading model:', err);
+    loaderEl.classList.add('hidden');
+    alert('Could not load the model. Make sure the file exists at: ' + file);
+  };
+
+  if (type === 'obj') {
+    objLoader.load(file, onLoad, onProgress, onError);
+  } else if (type === '3ds') {
+    tdsLoader.load(file, onLoad, onProgress, onError);
+  }
+}
+
+/* ---------- UI ---------- */
+const modelItems = document.querySelectorAll('.model-item');
+modelItems.forEach(item => {
+  item.addEventListener('click', () => {
+    modelItems.forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+
+    const type = item.dataset.model;
+    const file = item.dataset.file;
+    const name = item.dataset.name;
+    const format = item.dataset.format;
+    const desc = item.dataset.desc;
+
+    viewerLabel.textContent = file.split('/').pop();
+    infoTitle.textContent = name;
+    infoDesc.textContent = desc;
+    infoTags.innerHTML = `<span>${format}</span><span>Interactive</span><span>2024</span>`;
+
+    loadModel(type, file);
+  });
+});
+
+document.getElementById('btnRotate').addEventListener('click', function () {
+  controls.autoRotate = !controls.autoRotate;
+  this.classList.toggle('active', controls.autoRotate);
+});
+
+document.getElementById('btnWireframe').addEventListener('click', function () {
+  currentWireframe = !currentWireframe;
+  this.classList.toggle('active', currentWireframe);
+  if (currentModel) {
+    currentModel.traverse((child) => {
+      if (child.isMesh && child.material) {
+        if (Array.isArray(child.material)) {
+          child.material.forEach(m => m.wireframe = currentWireframe);
+        } else {
+          child.material.wireframe = currentWireframe;
+        }
+      }
+    });
+  }
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  camera.position.set(2.5, 2, 4);
+  controls.target.set(0, 0.5, 0);
+  controls.update();
+});
+
+/* ---------- RESIZE ---------- */
+window.addEventListener('resize', () => {
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+});
+
+/* ---------- LOAD FIRST MODEL ---------- */
+loadModel('obj', 'models/helmet.obj');
+
+/* ---------- RENDER LOOP ---------- */
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+
+</body>
+</html>
