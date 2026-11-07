@@ -210,7 +210,7 @@ footer { border-top: 1px solid var(--border); padding: 34px 0; position: relativ
             <div><h4>Cubes & heart</h4><h4>مكعبات وقلب</h4><span>OBJ · 3.1 MB</span></div>
           </button>
           <button class="model-item" 
-              data-model="obj" 
+              data-model="glb" 
               data-file="models/Flower.glb"
               data-name="Flower"
               data-format="GLB"
@@ -298,6 +298,8 @@ import { TDSLoader } from 'three/addons/loaders/TDSLoader.js';
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 /* ---------- THEME & NAV ---------- */
 (function () {
@@ -407,11 +409,23 @@ const tdsLoader = new TDSLoader();
 tdsLoader.setResourcePath('models/');
 
 const mtlLoader = new MTLLoader();
+
+
 const gltfLoader = new GLTFLoader();
 
+// 1) Draco — required for .glb files exported with compression on
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-gltfLoader.setDecoderPath(dracoLoader);
+gltfLoader.setDRACOLoader(dracoLoader);
+
+// 2) KTX2 — required for .glb files with KTX2 texture compression
+const ktx2Loader = new KTX2Loader()
+  .setTranscoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/basis/')
+  .detectSupport(renderer);
+gltfLoader.setKTX2Loader(ktx2Loader);
+
+// 3) Meshopt — required for .glb files using meshopt compression
+gltfLoader.setMeshoptDecoder(MeshoptDecoder);
 
 function clearScene() {
   if (currentModel) {
@@ -432,19 +446,31 @@ function clearScene() {
 
 function applyMaterials(object) {
   object.traverse((child) => {
-    if (child.isMesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-      if (!child.material || Array.isArray(child.material) && child.material.length === 0) {
-        child.material = new THREE.MeshStandardMaterial({
-          color: 0x8899aa,
-          roughness: 0.4,
-          metalness: 0.6,
-        });
-      }
-      if (currentWireframe) {
-        child.material.wireframe = true;
-      }
+    if (!child.isMesh) return;
+
+    child.castShadow = true;
+    child.receiveShadow = true;
+
+    // Ensure materials exist
+    if (!child.material ||
+        (Array.isArray(child.material) && child.material.length === 0)) {
+      child.material = new THREE.MeshStandardMaterial({
+        color: 0x8899aa,
+        roughness: 0.4,
+        metalness: 0.6,
+      });
+    }
+
+    // ✅ Apply wireframe safely to arrays too
+    const applyWire = (mat) => {
+      if (!mat) return;
+      mat.wireframe = currentWireframe;
+      mat.needsUpdate = true;
+    };
+    if (Array.isArray(child.material)) {
+      child.material.forEach(applyWire);
+    } else {
+      applyWire(child.material);
     }
   });
 }
@@ -455,27 +481,49 @@ function centerAndScale(object) {
   const center = box.getCenter(new THREE.Vector3());
 
   const maxDim = Math.max(size.x, size.y, size.z);
-  if (maxDim === 0) return;
+
+  // ✅ Guard against empty / broken geometry
+  if (!isFinite(maxDim) || maxDim <= 0.0001) {
+    console.warn('Model has no usable bounds — skipping scale/center.');
+    return;
+  }
+
   const scale = 3 / maxDim;
   object.scale.setScalar(scale);
-
-  object.position.x = -center.x * scale;
-  object.position.y = -center.y * scale + 0.5;
-  object.position.z = -center.z * scale;
+  object.position.set(-center.x * scale, -center.y * scale + 0.5, -center.z * scale);
 }
 
 
+
+
+function resetUI() {
+  currentWireframe = false;
+  controls.autoRotate = true;
+
+  document.getElementById('btnWireframe').classList.remove('active');
+  document.getElementById('btnRotate').classList.add('active');
+}
+
 function loadModel(type, file, mtlFile) {
+  resetUI();  
   clearScene();
   loaderEl.classList.remove('hidden');
 
   const onLoad = (object) => {
+  try {
     currentModel = object;
     applyMaterials(object);
     centerAndScale(object);
     scene.add(object);
     loaderEl.classList.add('hidden');
+  } catch (err) {
+    console.error('❌ Failed to process model:', err);
+    loaderEl.classList.add('hidden');
+    alert('Model loaded but could not be rendered:\n' + err.message);
+  }
   };
+
+  
 
   const onProgress = (xhr) => {
     if (xhr.total) {
@@ -557,17 +605,19 @@ document.getElementById('btnRotate').addEventListener('click', function () {
 document.getElementById('btnWireframe').addEventListener('click', function () {
   currentWireframe = !currentWireframe;
   this.classList.toggle('active', currentWireframe);
-  if (currentModel) {
-    currentModel.traverse((child) => {
-      if (child.isMesh && child.material) {
-        if (Array.isArray(child.material)) {
-          child.material.forEach(m => m.wireframe = currentWireframe);
-        } else {
-          child.material.wireframe = currentWireframe;
-        }
-      }
+
+  if (!currentModel) return;
+
+  currentModel.traverse((child) => {
+    if (!child.isMesh || !child.material) return;
+    const mats = Array.isArray(child.material)
+      ? child.material
+      : [child.material];
+    mats.forEach((m) => {
+      m.wireframe = currentWireframe;
+      m.needsUpdate = true;
     });
-  }
+  });
 });
 
 document.getElementById('btnReset').addEventListener('click', () => {
