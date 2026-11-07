@@ -340,7 +340,16 @@ footer { border-top: 1px solid var(--border); padding: 34px 0; position: relativ
       src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0`;
     }
 
-    container.innerHTML = `<iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    // Replace with this complete version
+    container.innerHTML = `
+    <iframe
+    src="${src}"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen>
+    </iframe>`;
+
+    //scontainer.innerHTML = `<iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
     caption.textContent = title;
 
     lastFocused = document.activeElement;
