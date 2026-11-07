@@ -197,17 +197,35 @@ footer { border-top: 1px solid var(--border); padding: 34px 0; position: relativ
       <div class="showcase">
 
         <div class="model-list" id="modelList">
-          <button class="model-item active" data-model="obj" data-file="models/Trunk-Tree.obj" data-name="Trunk Tree" data-format="OBJ" data-desc="Case Study of a tree trunk with top cut, soil, and a rimmed basin for watering the tree. دراسة حالة لجذع شجرة مقطوعة الجزء العلوي، مع التربة، وحوض ذو حواف لسقي الشجرة">
+          <button class="model-item active" data-model="glb" data-file="models/Trunk-Tree.gltf" data-name="Trunk Tree" data-format="GLB" data-desc="Case Study of a tree trunk with top cut, soil, and a rimmed basin for watering the tree. دراسة حالة لجذع شجرة مقطوعة الجزء العلوي، مع التربة، وحوض ذو حواف لسقي الشجرة">
             <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
-            <div><h4>Trunk Tree</h4><h4>جذع شجرة</h4><span>OBJ · 40.2 MB</span></div>
+            <div><h4>Trunk Tree</h4><h4>جذع شجرة</h4><span>GLTF · 19.20 MB</span></div>
           </button>
-          <button class="model-item" data-model="3ds" data-file="models/Grass-and-Mountains.obj" data-name="Grass & Mountains" data-format="OBJ" data-desc="Design of towering Mountains distributed around a green area with green grass that has characteristics similar to natural grass. تصميم جبال شاهقة متوزعة حول منطقة خضراء بها نجيل اخضر ذو خصائص تشبه النجيل الطبيعي">
+          <button class="model-item" data-model="obj" data-file="models/Grass-and-Mountains.obj" data-mtl="models/Grass-and-Mountains.mtl" data-name="Grass & Mountains" data-format="OBJ + MTL" data-desc="Design of towering Mountains distributed around a green area with green grass that has characteristics similar to natural grass. تصميم جبال شاهقة متوزعة حول منطقة خضراء بها نجيل اخضر ذو خصائص تشبه النجيل الطبيعي">
             <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9"/></svg></span>
-            <div><h4>Grass & Mountains</h4> <h4>نجيل وجبال</h4><span>3DS · 1.49 MB</span></div>
+            <div><h4>Grass & Mountains</h4> <h4>نجيل وجبال</h4><span>OBJ · 1.49 MB</span></div>
           </button>
-          <button class="model-item" data-model="obj" data-file="models/Cubes-and-Heart.obj" data-name="Cubes & heart" data-format="OBJ" data-desc="An abstract, cube-shaped design with six faces, each face carved with a heart connected to one another. تصميم تجريدي مكعب الشكل ذو ستة اوجة منحوت علي كل وجة قلب متصلة ببعضها البعض">
+          <button class="model-item" data-model="obj" data-file="models/Cubes-and-Heart.obj" data-mtl="models/Cubes-and-Heart.mtl" data-name="Cubes & heart" data-format="OBJ + MTL" data-desc="An abstract, cube-shaped design with six faces, each face carved with a heart connected to one another. تصميم تجريدي مكعب الشكل ذو ستة اوجة منحوت علي كل وجة قلب متصلة ببعضها البعض">
             <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4zM4 14h16v6H4z"/><path d="M8 7h.01M8 17h.01"/></svg></span>
             <div><h4>Cubes & heart</h4><h4>مكعبات وقلب</h4><span>OBJ · 3.1 MB</span></div>
+          </button>
+          <button class="model-item" 
+              data-model="obj" 
+              data-file="models/Flower.glb"
+              data-name="Flower"
+              data-format="GLB"
+              data-desc="Low-poly Flower with full PBR materials and textures.">
+              <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+              <div><h4>Flower وردة</h4><span>GLB · 0.84 MB</span></div>
+          </button>
+          <button class="model-item"
+              data-model="glb"
+              data-file="models/Plane.glb"
+              data-name="Plane"
+              data-format="GLB"
+              data-desc="Optimised binary glTF Plane model with baked textures.">
+              <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></span>
+              <div><h4>Plane</h4><span>GLB · 1.17 MB</span></div>
           </button>
         </div>
 
@@ -276,6 +294,10 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { TDSLoader } from 'three/addons/loaders/TDSLoader.js';
+
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 /* ---------- THEME & NAV ---------- */
 (function () {
@@ -384,6 +406,13 @@ const objLoader = new OBJLoader();
 const tdsLoader = new TDSLoader();
 tdsLoader.setResourcePath('models/');
 
+const mtlLoader = new MTLLoader();
+const gltfLoader = new GLTFLoader();
+
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+gltfLoader.setDecoderPath(dracoLoader);
+
 function clearScene() {
   if (currentModel) {
     scene.remove(currentModel);
@@ -435,7 +464,8 @@ function centerAndScale(object) {
   object.position.z = -center.z * scale;
 }
 
-function loadModel(type, file) {
+
+function loadModel(type, file, mtlFile) {
   clearScene();
   loaderEl.classList.remove('hidden');
 
@@ -450,7 +480,8 @@ function loadModel(type, file) {
   const onProgress = (xhr) => {
     if (xhr.total) {
       const pct = Math.round((xhr.loaded / xhr.total) * 100);
-      loaderEl.querySelector('.spinner').style.borderTopColor = `hsl(${pct * 1.2}, 80%, 65%)`;
+      loaderEl.querySelector('.spinner').style.borderTopColor =
+        `hsl(${pct * 1.2}, 80%, 65%)`;
     }
   };
 
@@ -460,12 +491,40 @@ function loadModel(type, file) {
     alert('Could not load the model. Make sure the file exists at: ' + file);
   };
 
+  // ---- OBJ (with or without MTL) ----
   if (type === 'obj') {
-    objLoader.load(file, onLoad, onProgress, onError);
+    if (mtlFile) {
+      // OBJ + MTL: load materials FIRST, then geometry
+      mtlLoader.load(
+        mtlFile,
+        (materials) => {
+          materials.preload();
+          const loader = new OBJLoader();
+          loader.setMaterials(materials);            // attach MTL to OBJ
+          loader.load(file, onLoad, onProgress, onError);
+        },
+        onProgress,
+        onError
+      );
+    } else {
+      objLoader.load(file, onLoad, onProgress, onError);
+    }
+
+  // ---- 3DS ----
   } else if (type === '3ds') {
     tdsLoader.load(file, onLoad, onProgress, onError);
+
+  // ---- GLTF / GLB ----
+  } else if (type === 'gltf' || type === 'glb') {
+    gltfLoader.load(
+      file,
+      (gltf) => onLoad(gltf.scene),   // 👈 GLTF wraps the model in .scene
+      onProgress,
+      onError
+    );
   }
 }
+
 
 /* ---------- UI ---------- */
 const modelItems = document.querySelectorAll('.model-item');
@@ -476,6 +535,7 @@ modelItems.forEach(item => {
 
     const type = item.dataset.model;
     const file = item.dataset.file;
+    const mtlFile = item.dataset.mtl || null;
     const name = item.dataset.name;
     const format = item.dataset.format;
     const desc = item.dataset.desc;
@@ -485,7 +545,7 @@ modelItems.forEach(item => {
     infoDesc.textContent = desc;
     infoTags.innerHTML = `<span>${format}</span><span>Interactive</span><span>2024</span>`;
 
-    loadModel(type, file);
+    loadModel(type, file, mtlFile);
   });
 });
 
@@ -526,7 +586,7 @@ window.addEventListener('resize', () => {
 });
 
 /* ---------- LOAD FIRST MODEL ---------- */
-loadModel('obj', 'models/helmet.obj');
+loadModel('obj', 'models/Trunk-Tree.gltf');
 
 /* ---------- RENDER LOOP ---------- */
 function animate() {
